@@ -1,0 +1,203 @@
+scalar Cursor
+scalar Time
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: Cursor
+  endCursor: Cursor
+}
+
+interface Node {
+  id: ID!
+}
+
+type InventoryConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [InventoryEdge]
+}
+
+type InventoryEdge {
+  node: Inventory
+  cursor: Cursor!
+}
+
+type Inventory implements Node {
+  id: ID!
+  user: User!
+  items: [Item]
+  created_at: String!
+  last_updated_at: String!
+}
+
+input CreateInventoryInput {
+  user: ID!
+  items: [ID]
+  created_at: String
+  last_updated_at: String
+}
+
+input UpdateInventoryInput {
+  id: ID!
+  user: ID
+  items: [ID]
+  created_at: String
+  last_updated_at: String
+}
+
+type ItemConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [ItemEdge]
+}
+
+type ItemEdge {
+  node: Item
+  cursor: Cursor!
+}
+
+type Item implements Node {
+  id: ID!
+  inventory: Inventory!
+  itemtype: ItemType!
+  gacha_damage: Int!
+  gacha_speed: Int!
+  num_trial: Int!
+  price: Int!
+  created_at: String!
+  last_updated_at: String!
+}
+
+input CreateItemInput {
+  inventory: ID!
+  itemtype: ID!
+  gacha_damage: Int
+  gacha_speed: Int
+  num_trial: Int
+  price: Int
+  created_at: String
+  last_updated_at: String
+}
+
+input UpdateItemInput {
+  id: ID!
+  inventory: ID
+  itemtype: ID
+  gacha_damage: Int
+  gacha_speed: Int
+  num_trial: Int
+  price: Int
+  created_at: String
+  last_updated_at: String
+}
+
+type ItemTypeConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [ItemTypeEdge]
+}
+
+type ItemTypeEdge {
+  node: ItemType
+  cursor: Cursor!
+}
+
+type ItemType implements Node {
+  id: ID!
+  name: String!
+  damage: Int!
+  speed: Int!
+  gold_per_second: Int!
+  created_at: String!
+  last_updated_at: String!
+}
+
+input CreateItemTypeInput {
+  name: String!
+  damage: Int
+  speed: Int
+  gold_per_second: Int
+  created_at: String
+  last_updated_at: String
+}
+
+type UserConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [UserEdge]
+}
+
+type UserEdge {
+  node: User
+  cursor: Cursor!
+}
+
+type User implements Node {
+  id: ID!
+  item_on_slot: Int!
+  gold: Int!
+  created_at: String!
+  last_updated_at: String!
+  inventory: Inventory
+}
+
+input CreateUserInput {
+  item_on_slot: Int
+  gold: Int
+  created_at: String
+  last_updated_at: String
+  inventory: ID
+}
+
+input UpdateUserInput {
+  id: ID!
+  item_on_slot: Int
+  gold: Int
+  created_at: String
+  last_updated_at: String
+  inventory: ID
+}
+
+type Query {
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]!
+
+  User(id: ID): User
+  Users: [User!]!
+  UserList(after: Cursor, first: Int, before: Cursor, last: Int): UserConnection
+
+  Inventory(id: ID): Inventory
+  Inventories: [Inventory!]!
+  InventoryList(
+    after: Cursor
+    first: Int
+    before: Cursor
+    last: Int
+  ): InventoryConnection
+
+  Item(id: ID): Item
+  Items: [Item!]!
+  ItemList(after: Cursor, first: Int, before: Cursor, last: Int): ItemConnection
+
+  ItemType(id: ID): ItemType
+  ItemTypes: [ItemType!]!
+  ItemTypeList(
+    after: Cursor
+    first: Int
+    before: Cursor
+    last: Int
+  ): ItemTypeConnection
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+
+  createInventory(input: CreateInventoryInput!): Inventory!
+  updateInventory(input: UpdateInventoryInput!): Inventory!
+
+  createItem(input: CreateItemInput!): Item!
+  updateItem(input: UpdateItemInput!): Item!
+  createItemType(input: CreateItemTypeInput!): ItemType!
+}
