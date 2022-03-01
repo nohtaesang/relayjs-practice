@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<57ea7c00c4dc2fae335616e71e71252d>>
+ * @generated SignedSource<<42f2be88424ce63ab74f19110ee19d6e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,11 +10,7 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateUserInput = {
-  item_on_slot?: number | null;
-  gold?: number | null;
-  created_at?: string | null;
-  last_updated_at?: string | null;
-  inventory?: string | null;
+  gold: number;
 };
 export type AdminCreateUserMutation$variables = {
   input: CreateUserInput;

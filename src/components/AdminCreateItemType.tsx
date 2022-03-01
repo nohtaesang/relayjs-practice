@@ -32,15 +32,12 @@ export const AdminCreateItemType = () => {
           name,
           damage: Number(damage),
           speed: Number(speed),
-          // gold_per_second: Number(gold_per_second),
         },
       },
       onCompleted: (data) => {
         toaster.success(`Item type created`);
       },
-      onError: (error) => {
-        console.log(error);
-      },
+      onError: (error) => {},
     });
   });
 
@@ -69,13 +66,7 @@ export const AdminCreateItemType = () => {
             placeholder="speed"
             required
           />
-          {/* <TextInputField
-            {...register("gold_per_second")}
-            type="number"
-            label="gold_per_second"
-            placeholder="gold_per_second"
-            required
-          /> */}
+
           <Button type="submit">Create item type</Button>
         </form>
       </Pane>

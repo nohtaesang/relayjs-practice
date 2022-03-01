@@ -1,15 +1,29 @@
 scalar Cursor
 scalar Time
 
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: Cursor
-  endCursor: Cursor
-}
-
 interface Node {
   id: ID!
+}
+
+type EnhanceConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [EnhanceEdge]
+}
+
+type EnhanceEdge {
+  node: Enhance
+  cursor: Cursor!
+}
+
+type Enhance implements Node {
+  id: ID!
+  success: Boolean
+  item: Item!
+}
+
+input CreateEnhanceInput {
+  item: ID!
 }
 
 type InventoryConnection {
@@ -26,24 +40,15 @@ type InventoryEdge {
 type Inventory implements Node {
   id: ID!
   user: User!
-  items: [Item]
+  item_on_slot: String!
+  items: [Item]!
   created_at: String!
   last_updated_at: String!
 }
 
-input CreateInventoryInput {
-  user: ID!
-  items: [ID]
-  created_at: String
-  last_updated_at: String
-}
-
 input UpdateInventoryInput {
   id: ID!
-  user: ID
-  items: [ID]
-  created_at: String
-  last_updated_at: String
+  item_on_slot: ID!
 }
 
 type ItemConnection {
@@ -61,35 +66,17 @@ type Item implements Node {
   id: ID!
   inventory: Inventory!
   itemtype: ItemType!
-  gacha_damage: Int!
-  gacha_speed: Int!
-  num_trial: Int!
-  price: Int!
+  damage: Int!
+  speed: Int!
+  current_enhance: Int! # default 0
+  price: Int! # 마법의 공식: damage * speed * 7
   created_at: String!
   last_updated_at: String!
 }
 
 input CreateItemInput {
   inventory: ID!
-  itemtype: ID!
-  gacha_damage: Int
-  gacha_speed: Int
-  num_trial: Int
-  price: Int
-  created_at: String
-  last_updated_at: String
-}
-
-input UpdateItemInput {
-  id: ID!
-  inventory: ID
-  itemtype: ID
-  gacha_damage: Int
-  gacha_speed: Int
-  num_trial: Int
-  price: Int
-  created_at: String
-  last_updated_at: String
+  itemtype: ID! # initial damage, speed, price 결정
 }
 
 type ItemTypeConnection {
@@ -122,6 +109,13 @@ input CreateItemTypeInput {
   last_updated_at: String
 }
 
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: Cursor
+  endCursor: Cursor
+}
+
 type UserConnection {
   totalCount: Int!
   pageInfo: PageInfo!
@@ -135,37 +129,25 @@ type UserEdge {
 
 type User implements Node {
   id: ID!
-  item_on_slot: Int!
   gold: Int!
   created_at: String!
   last_updated_at: String!
-  inventory: Inventory
+  inventory: Inventory!
 }
 
 input CreateUserInput {
-  item_on_slot: Int
-  gold: Int
-  created_at: String
-  last_updated_at: String
-  inventory: ID
-}
-
-input UpdateUserInput {
-  id: ID!
-  item_on_slot: Int
-  gold: Int
-  created_at: String
-  last_updated_at: String
-  inventory: ID
+  gold: Int!
 }
 
 type Query {
-  node(id: ID!): Node
-  nodes(ids: [ID!]!): [Node]!
-
-  User(id: ID): User
-  Users: [User!]!
-  UserList(after: Cursor, first: Int, before: Cursor, last: Int): UserConnection
+  Enhance(id: ID): Enhance
+  Enhances: [Enhance!]!
+  EnhanceList(
+    after: Cursor
+    first: Int
+    before: Cursor
+    last: Int
+  ): EnhanceConnection
 
   Inventory(id: ID): Inventory
   Inventories: [Inventory!]!
@@ -188,16 +170,19 @@ type Query {
     before: Cursor
     last: Int
   ): ItemTypeConnection
+
+  User(id: ID): User
+  Users: [User!]!
+  UserList(after: Cursor, first: Int, before: Cursor, last: Int): UserConnection
+
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]!
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): User!
-  updateUser(input: UpdateUserInput!): User!
-
-  createInventory(input: CreateInventoryInput!): Inventory!
+  createEnhance(input: CreateEnhanceInput!): Enhance!
   updateInventory(input: UpdateInventoryInput!): Inventory!
-
   createItem(input: CreateItemInput!): Item!
-  updateItem(input: UpdateItemInput!): Item!
   createItemType(input: CreateItemTypeInput!): ItemType!
+  createUser(input: CreateUserInput!): User!
 }

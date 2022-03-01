@@ -1,6 +1,7 @@
 import { Pane, Paragraph, Tab, Tablist } from "evergreen-ui";
 import { Suspense, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { GameShop } from "../components/GameShop";
 import { GameUserInformation } from "../components/GameUserInformation";
 import { GameUserInventory } from "../components/GameUserInventory";
 
@@ -59,7 +60,10 @@ type GamePageContentType = {
 const GamePageContent = ({ userId, tabValue }: GamePageContentType) => {
   switch (tabValue) {
     case "INVENTORY":
-    default:
       return <GameUserInventory userId={userId} />;
+    case "SHOP":
+      return <GameShop userId={userId} />;
+    default:
+      return null;
   }
 };

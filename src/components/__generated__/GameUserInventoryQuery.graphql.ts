@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c9ead92156b0b6ada884ad04e1fd8db7>>
+ * @generated SignedSource<<c8a2ef0f468578a7df7cefc9de7e436e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,8 +21,12 @@ export type GameUserInventoryQuery$data = {
       readonly last_updated_at: string;
       readonly items: ReadonlyArray<{
         readonly id: string;
-      } | null> | null;
-    } | null;
+        readonly damage: number;
+        readonly speed: number;
+        readonly current_enhance: number;
+        readonly price: number;
+      } | null>;
+    };
   } | null;
 };
 export type GameUserInventoryQueryResponse = GameUserInventoryQuery$data;
@@ -84,7 +88,35 @@ v3 = {
       "name": "items",
       "plural": true,
       "selections": [
-        (v2/*: any*/)
+        (v2/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "damage",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "speed",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "current_enhance",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "price",
+          "storageKey": null
+        }
       ],
       "storageKey": null
     }
@@ -136,16 +168,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4ce8115297d04c1364725fd667239f92",
+    "cacheID": "f573b94aff2bb8b9a23680b24bf27f97",
     "id": null,
     "metadata": {},
     "name": "GameUserInventoryQuery",
     "operationKind": "query",
-    "text": "query GameUserInventoryQuery(\n  $id: ID!\n) {\n  User(id: $id) {\n    inventory {\n      id\n      created_at\n      last_updated_at\n      items {\n        id\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query GameUserInventoryQuery(\n  $id: ID!\n) {\n  User(id: $id) {\n    inventory {\n      id\n      created_at\n      last_updated_at\n      items {\n        id\n        damage\n        speed\n        current_enhance\n        price\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "d2b5e16e7ab9bd2674a35e60fbb13706";
+(node as any).hash = "afa23162fdf5ec3c616df2aa6a4b5e48";
 
 export default node;
