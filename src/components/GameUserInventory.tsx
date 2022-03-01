@@ -68,7 +68,6 @@ const UserItems = ({ queryReference, commit }: any) => {
     UserInventoryQuery,
     queryReference
   );
-  console.log(User);
 
   const handleClickEnhance = (item: any) => () => {
     commit({
